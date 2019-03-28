@@ -166,7 +166,8 @@ class Account(StripeModel):
 
 	@classmethod
 	def get_default_account(cls):
-		account_data = cls.stripe_class.retrieve(api_key=djstripe_settings.STRIPE_SECRET_KEY)
+		api_key = djstripe_settings.get_default_api_key(None)
+		account_data = cls.stripe_class.retrieve(api_key=api_key)
 
 		return cls._get_or_create_from_stripe_object(account_data)[0]
 

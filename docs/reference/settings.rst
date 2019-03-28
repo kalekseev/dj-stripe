@@ -44,6 +44,18 @@ The function MUST return a string suitably random for the object_type/action
 pair, and usable in the Stripe ``Idempotency-Key`` HTTP header.
 For more information, see the `stripe documentation`_.
 
+DJSTRIPE_DEFAULT_API_KEY_CALLBACK (=djstripe.settings._get_default_api_key)
+===========================================================================
+
+A function which will return stripe secret key that will be used by default.
+
+The function takes the following signature:
+
+.. code-block:: python
+
+    def get_default_api_key(livemode: bool):
+        return "<secret key>"
+
 DJSTRIPE_PRORATION_POLICY (=False)
 ==================================
 

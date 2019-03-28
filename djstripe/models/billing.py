@@ -346,7 +346,7 @@ class Invoice(StripeModel):
 	@classmethod
 	def upcoming(
 		cls,
-		api_key=djstripe_settings.STRIPE_SECRET_KEY,
+		api_key=None,
 		customer=None,
 		coupon=None,
 		subscription=None,
@@ -398,6 +398,8 @@ class Invoice(StripeModel):
 		:returns: The upcoming preview invoice.
 		:rtype: UpcomingInvoice
 		"""
+
+		api_key = api_key or djstripe_settings.get_default_api_key(None)
 
 		# Convert Customer to id
 		if customer is not None and isinstance(customer, StripeModel):

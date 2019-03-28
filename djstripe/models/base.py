@@ -86,7 +86,7 @@ class StripeModel(models.Model):
 		)
 
 	@classmethod
-	def api_list(cls, api_key=djstripe_settings.STRIPE_SECRET_KEY, **kwargs):
+	def api_list(cls, api_key=None, **kwargs):
 		"""
 		Call the stripe API's list operation for this model.
 
@@ -97,17 +97,19 @@ class StripeModel(models.Model):
 
 		:returns: an iterator over all items in the query
 		"""
+		api_key = api_key or djstripe_settings.get_default_api_key(None)
 
 		return cls.stripe_class.list(api_key=api_key, **kwargs).auto_paging_iter()
 
 	@classmethod
-	def _api_create(cls, api_key=djstripe_settings.STRIPE_SECRET_KEY, **kwargs):
+	def _api_create(cls, api_key=None, **kwargs):
 		"""
 		Call the stripe API's create operation for this model.
 
 		:param api_key: The api key to use for this request. Defualts to djstripe_settings.STRIPE_SECRET_KEY.
 		:type api_key: string
 		"""
+		api_key = api_key or djstripe_settings.get_default_api_key(None)
 
 		return cls.stripe_class.create(api_key=api_key, **kwargs)
 

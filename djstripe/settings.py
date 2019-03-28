@@ -114,7 +114,7 @@ if hasattr(settings, "STRIPE_API_HOST"):
 	stripe.api_base = settings.STRIPE_API_HOST
 
 
-def get_default_api_key(livemode):
+def _get_default_api_key(livemode):
 	"""
 	Returns the default API key for a value of `livemode`.
 	"""
@@ -127,6 +127,9 @@ def get_default_api_key(livemode):
 	else:
 		# Livemode is false, use the test secret key
 		return TEST_API_KEY or STRIPE_SECRET_KEY
+
+
+get_default_api_key = get_callback_function("DJSTRIPE_DEFAULT_API_KEY_CALLBACK", _get_default_api_key)
 
 
 SUBSCRIPTION_REDIRECT = getattr(settings, "DJSTRIPE_SUBSCRIPTION_REDIRECT", "")

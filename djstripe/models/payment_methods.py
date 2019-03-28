@@ -228,25 +228,27 @@ class Card(StripeModel):
 		return customer, kwargs
 
 	@classmethod
-	def _api_create(cls, api_key=djstripe_settings.STRIPE_SECRET_KEY, **kwargs):
+	def _api_create(cls, api_key=None, **kwargs):
 		# OVERRIDING the parent version of this function
 		# Cards must be manipulated through a customer or account.
 		# TODO: When managed accounts are supported, this method needs to
 		# check if either a customer or account is supplied to determine
 		# the correct object to use.
 
+		api_key = api_key or djstripe_settings.get_default_api_key(None)
 		customer, clean_kwargs = cls._get_customer_from_kwargs(**kwargs)
 
 		return customer.api_retrieve().sources.create(api_key=api_key, **clean_kwargs)
 
 	@classmethod
-	def api_list(cls, api_key=djstripe_settings.STRIPE_SECRET_KEY, **kwargs):
+	def api_list(cls, api_key=None, **kwargs):
 		# OVERRIDING the parent version of this function
 		# Cards must be manipulated through a customer or account.
 		# TODO: When managed accounts are supported, this method needs to
 		# check if either a customer or account is supplied to determine
 		# the correct object to use.
 
+		api_key = api_key or djstripe_settings.get_default_api_key(None)
 		customer, clean_kwargs = cls._get_customer_from_kwargs(**kwargs)
 
 		return (
@@ -310,7 +312,7 @@ class Card(StripeModel):
 		exp_month,
 		exp_year,
 		cvc,
-		api_key=djstripe_settings.STRIPE_SECRET_KEY,
+		api_key=None,
 		**kwargs
 	):
 		"""
@@ -329,6 +331,7 @@ class Card(StripeModel):
 		:type cvc: string
 		"""
 
+		api_key = api_key or djstripe_settings.get_default_api_key(None)
 		card = {"number": number, "exp_month": exp_month, "exp_year": exp_year, "cvc": cvc}
 		card.update(kwargs)
 
